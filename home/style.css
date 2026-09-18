@@ -250,7 +250,7 @@ body{
 }
 
 .bg .section:last-of-type{
-    --g-h: calc(var(--c-h) - var(--g-hue-adjust, 0));
+    --g-h: calc(var(--c-h) - var(--g-hue-ajust, 0));
     --g-s: calc(var(--c-s) - 25%);
     --g-l: calc(var(--c-l) + 20%);
     transform: scale3d(1, -1, 1) translateZ(1px);
@@ -386,7 +386,7 @@ body{
 }
 
 .content, .content .left, .content .right, .content .bar, .content .text{
-    transition: var(--notch-duration) var(--ease-out);
+    transition: var(--notch-duration) --ease-out;
 }
 
 .content .left, .content .right, .content .bar{
@@ -410,4 +410,50 @@ body{
     content: "Music ";
     order: 1;
     text-transform: uppercase;
+}
+
+.content .text:after{
+    order: 2;
+    content: "MusicName";
+    opacity: 0.5;
+}
+
+.content .right{
+    flex-grow: 1;
+}
+
+.content .title{
+    background: #1a1ab3;
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 33.3%;
+    position: relative;
+}
+
+.content .title:before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(50% 50% at 55% 40%, #131386, #cd1385 75%, transparent) center/133.3% 133.3%;
+    background-color: yellow;
+    filter: blur(0.5em);
+
+}
+
+.content .bar{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    flex-basis: 100%;
+    max-height: var(--bar-height, 0%);
+    color: rgba(255, 255, 255, 0.5);
+    opacity: var(--bar-opacity, 0);
+}
+
+.content .bar .duration{
+    position: relative;
+    height: var(--duration-height);
+    background: rgba(255, 255, 255, 0.25);
+    
 }
