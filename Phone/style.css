@@ -629,4 +629,63 @@ input[type=radio]{
     animation: test 1s infinite alternate-reverse;
 }
 
-#deep-purple:checked~.pallette label[for=deep-purple]
+#deep-purple:checked ~ .palette label[for="deep-purple"]{
+    border-color: hsl(var(--deep-purple), 50% 75%);
+}
+
+#gold:checked ~ .phone .bg .gold{
+    opacity: 1;
+    z-index: 1;
+    transition-delay: 0s;
+}
+
+#gold:checked ~ .phone .bg .gold .section::before{
+    transition: 0s;
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+    animation: test 1s infinite alternate-reverse;
+}
+
+#gold:checked ~ .palette label[for="gold"]{
+    border-color: hsl(var(--gold), 50% 75%);
+}
+
+#space-black:checked ~ .phone .bg .space-black{
+    opacity: 1;
+    z-index: 1;
+    transition-delay: 0s;
+}
+
+#space-black:checked ~ .phone .bg .space-black .section::before{
+    transition: 0s;
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+    animation: test 1s infinite alternate-reverse;
+}
+
+#space-black:checked ~ .palette label[for="space-black"]{
+    border-color: hsl(var(--space-black), 50% 75%);
+}
+
+#silver:checked ~ .phone .bg .silver{
+    opacity: 1;
+    z-index: 1;
+    transition-delay: 0s;
+}
+
+#silver:checked ~ .phone .bg .silver .section::before{
+    transition: 0s;
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+    animation: test 1s infinite alternate-reverse;
+}
+
+#silver:checked ~ .palette label[for="silver"]{
+    border-color: hsl(var(--silver), 50% 75%);
+}
+
+@keyframes test{
+    from{
+        transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+    }
+    to{
+        transform: scale3d(2, 2, 2) translate3d(50px, 50px, 50px);
+    }
+}
