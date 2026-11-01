@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NordVPN Style Dashboard</title>
+    <style>
+      :root {
+        --bg-1: #070d16;
+        --bg-2: #0c1725;
+        --bg-3: #101a2b;
+        --panel: rgba(17, 24, 39, 0.9);
+        --card: rgba(12, 19, 31, 0.9);
+        --line: rgba(148, 163, 184, 0.18);
+        --text: #edf6ff;
+        --muted: #a5bddf;
+        --primary: #7ef9ff;
+        --primary-2: #6d8cff;
+        --success: #67f0c4;
+        --danger: #ff6b6b;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; min-height: 100%; }
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #020a12, #0a1422 40%, #101d2f);
+        color: var(--text);
+        display: flex; justify-content: center; align-items: center; padding: 28px;
+      }
+
+      .app-shell {
+        width: min(1100px, 100%);
+        background: rgba(8, 12, 20, 0.85);
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        overflow: hidden;
+        box-shadow: 0 28px 60px rgba(0,0,0,0.45);
+      }
+
+      .topbar {
+        display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 28px; border-bottom: 1px solid var(--line); background: rgba(10, 18, 28, 0.9);
+      }
+
+      .brand { display: flex; align-items: center; gap: 14px; }
+      .brand-mark {
+        width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: #071827;
+      }
+      .eyebrow { margin: 0 0 4px; color: var(--muted); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; }
+      h1 { margin: 0; font-size: clamp(1.6rem, 3vw, 2.6rem); }
+
+      .status-pill {
+        display: inline-flex; align-items: center; justify-content: center; min-width: 110px; padding: 10px 16px; border-radius: 999px; font-weight: 700;
+      }
+      .status-pill.online { background: rgba(103, 240, 196, 0.12); border: 1px solid rgba(103, 240, 196, 0.32); color: var(--success); }
+      .status-pill.offline { background: rgba(255, 107, 107, 0.08); border: 1px solid rgba(255, 107, 107, 0.3); color: var(--danger); }
+
+      .content { display: grid; grid-template-columns: 1.1fr 1.4fr; gap: 24px; padding: 24px 28px 28px; }
+      .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 20px; }
+      .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+      .stat-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 15px 16px; }
+      .stat-label { display: block; color: var(--muted); margin-bottom: 8px; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; }
+      .stat-value { display: block; font-weight: 700; font-size: 1.1rem; }
+      .tunnel-box {
+        background: linear-gradient(180deg, rgba(124, 249, 255, 0.06), rgba(109, 140, 255, 0.04));
+        border: 1px solid rgba(124, 249, 255, 0.15); border-radius: 14px; padding: 14px 15px; color: var(--primary);
+      }
+      .primary-btn, .secondary-btn, .ghost-btn { border: none; border-radius: 12px; padding: 12px 18px; font-weight: 700; cursor: pointer; }
+      .primary-btn { background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: #071827; }
+      .secondary-btn { background: rgba(124,249,255,0.08); color: var(--primary); border: 1px solid rgba(124,249,255,0.3); }
+      .ghost-btn { background: rgba(148,163,184,0.08); color: var(--text); border: 1px solid var(--line); }
+      .button-row { display: flex; justify-content: flex-end; margin-top: 18px; }
+
+      .settings-panel form { display: flex; flex-direction: column; gap: 18px; }
+      .field-group { display: flex; flex-direction: column; gap: 8px; }
+      .field-row { display: flex; gap: 16px; }
+      .field-row.two > * { flex: 1; }
+      label { color: var(--muted); font-size: 0.9rem; }
+      input, select { background: rgba(7, 12, 20, 0.95); color: var(--text); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; font-size: 1rem; }
+      @media (max-width: 760px) { .content { grid-template-columns: 1fr; } .topbar { flex-direction: column; align-items: flex-start; } .stats-grid { grid-template-columns: 1fr 1fr; } .field-row.two { flex-direction: column; } }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">V</div>
+          <div>
+            <p class="eyebrow">Premium secure access</p>
+            <h1>VaultShield</h1>
+          </div>
+        </div>
+        <div id="statusPill" class="status-pill offline">Offline</div>
+      </header>
+
+      <main class="content">
+        <section class="panel">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">Region</span>
+              <span id="regionLabel" class="stat-value">US East</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Tunnel</span>
+              <span id="tunnelCode" class="stat-value">public-vpn-152.opengw.net</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">IP</span>
+              <span id="ipLabel" class="stat-value">192.168.0.20</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Latency</span>
+              <span id="latencyLabel" class="stat-value">18ms</span>
+            </div>
+          </div>
+
+          <div class="tunnel-box" id="tunnelBox">Secure tunnel ready for connection.</div>
+
+          <div class="button-row" style="margin-top: 18px;">
+            <button id="toggleConnection" class="primary-btn">Connect</button>
+          </div>
+        </section>
+
+        <section class="panel settings-panel">
+          <h2>Connection Settings</h2>
+          <form id="vpnForm">
+            <div class="field-group">
+              <label for="serverSelect">Server</label>
+              <select id="serverSelect">
+                <option value="US East" data-code="public-vpn-152.opengw.net" selected>US East</option>
+                <option value="US West" data-code="public-vpn-211.opengw.net">US West</option>
+                <option value="Europe" data-code="public-vpn-304.opengw.net">Europe</option>
+                <option value="Asia" data-code="public-vpn-441.opengw.net">Asia</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="protocolSelect">Protocol</label>
+              <select id="protocolSelect">
+                <option value="WireGuard" data-encryption="AES-256-GCM + ChaCha20-Poly1305" selected>WireGuard</option>
+                <option value="OpenVPN" data-encryption="AES-256-CBC + SHA-256">OpenVPN</option>
+                <option value="IKEv2" data-encryption="AES-256-GCM + SHA-384">IKEv2</option>
+              </select>
+            </div>
+
+            <div class="field-row two">
+              <div class="field-group">
+                <label for="usernameInput">Username</label>
+                <input id="usernameInput" type="text" value="pro-user" />
+              </div>
+              <div class="field-group">
+                <label for="passwordInput">Password</label>
+                <input id="passwordInput" type="password" value="vault2026" />
+              </div>
+            </div>
+
+            <div class="field-row actions">
+              <button type="button" id="saveSettings" class="secondary-btn">Save</button>
+              <button type="button" id="disconnectBtn" class="ghost-btn">Disconnect</button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const connectBtn = document.getElementById('toggleConnection');
+      const disconnectBtn = document.getElementById('disconnectBtn');
+      const saveBtn = document.getElementById('saveSettings');
+      const statusPill = document.getElementById('statusPill');
+      const regionLabel = document.getElementById('regionLabel');
+      const tunnelCode = document.getElementById('tunnelCode');
+      const ipLabel = document.getElementById('ipLabel');
+      const latencyLabel = document.getElementById('latencyLabel');
+      const tunnelBox = document.getElementById('tunnelBox');
+      const serverSelect = document.getElementById('serverSelect');
+      const protocolSelect = document.getElementById('protocolSelect');
+      const usernameInput = document.getElementById('usernameInput');
+      const passwordInput = document.getElementById('passwordInput');
+
+      const latencyMap = { 'US East': '18ms', 'US West': '22ms', Europe: '29ms', Asia: '41ms' };
+
+      function setStatus(connected) {
+        statusPill.textContent = connected ? 'Online' : 'Offline';
+        statusPill.classList.toggle('online', connected);
+        statusPill.classList.toggle('offline', !connected);
+        connectBtn.textContent = connected ? 'Disconnect' : 'Connect';
+        tunnelBox.textContent = connected ? 'Secure tunnel active. No leaks detected.' : 'Secure tunnel ready for connection.';
+      }
+
+      function updateConnectionInfo() {
+        const region = serverSelect.value;
+        const code = serverSelect.selectedOptions[0].dataset.code || 'public-vpn-152.opengw.net';
+        const protocol = protocolSelect.value;
+
+        regionLabel.textContent = region;
+        tunnelCode.textContent = code;
+        latencyLabel.textContent = latencyMap[region] || '24ms';
+
+        if (statusPill.textContent === 'Online') {
+          ipLabel.textContent = '10.8.' + (Math.floor(Math.random() * 9) + 1) + '.' + (Math.floor(Math.random() * 80) + 10);
+          tunnelBox.textContent = protocol + ' tunnel active • no leaks detected';
+        } else {
+          ipLabel.textContent = '192.168.0.20';
+          tunnelBox.textContent = 'Secure tunnel ready for connection.';
+        }
+      }
+
+      connectBtn.addEventListener('click', () => {
+        const online = statusPill.textContent === 'Online';
+        setStatus(!online);
+        updateConnectionInfo();
+      });
+
+      disconnectBtn.addEventListener('click', () => {
+        setStatus(false);
+        ipLabel.textContent = '192.168.0.20';
+        tunnelBox.textContent = 'Secure tunnel ready for connection.';
+      });
+
+      saveBtn.addEventListener('click', () => {
+        const user = usernameInput.value.trim() || 'pro-user';
+        const pass = passwordInput.value.trim() || 'vault2026';
+        console.log('VaultShield saved config:', {
+          user,
+          pass,
+          region: serverSelect.value,
+          code: serverSelect.selectedOptions[0].dataset.code,
+          protocol: protocolSelect.value,
+          encryption: protocolSelect.selectedOptions[0].dataset.encryption
+        });
+        if (statusPill.textContent === 'Online') updateConnectionInfo();
+      });
+
+      serverSelect.addEventListener('change', updateConnectionInfo);
+      protocolSelect.addEventListener('change', updateConnectionInfo);
+      setStatus(false);
+      updateConnectionInfo();
+    </script>
+  </body>
+</html>
